@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+
+PACKAGE = $(shell dh_listpackages)
+TMP     = $(CURDIR)/debian/$(PACKAGE)
+
+unexport PERL_LWP_SSL_VERIFY_HOSTNAME
+
+%:
+	dh $@
+
+override_dh_auto_test:
+	# disable DNS queries, Test::RequiresInternet
+	RES_OPTIONS=attempts:0 NO_NETWORK_TESTING=1 dh_auto_test
+
+override_dh_installexamples:
+	dh_installexamples
+	sed -i '1s|^#!/usr/bin/env perl|#!/usr/bin/perl|' $(TMP)/usr/share/doc/$(PACKAGE)/examples/*
