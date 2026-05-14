@@ -1,16 +1,16 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::RequiresInternet ('jigsaw.w3.org' => 80);
+use Test::RequiresInternet ('jigsaw.w3.org' => 443);
 
-use HTTP::Request;
-use LWP::UserAgent;
+use HTTP::Request ();
+use LWP::UserAgent ();
 
 plan tests => 8;
 
 my $ua = LWP::UserAgent->new(keep_alive => 1);
 
-my $req = HTTP::Request->new(GET => "http://jigsaw.w3.org/HTTP/ChunkedScript");
+my $req = HTTP::Request->new(GET => "https://jigsaw.w3.org/HTTP/ChunkedScript");
 my $res = $ua->request($req);
 isa_ok($res, 'HTTP::Response', 'request: Got a proper response');
 
