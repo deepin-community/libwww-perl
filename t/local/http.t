@@ -1,16 +1,15 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::Fatal;
+use Test::Fatal qw( exception );
 
-use Config;
-use FindBin qw($Bin);
+use Config qw( %Config );
+use FindBin qw( $Bin );
 use HTTP::Cookies ();
-use HTTP::Daemon;
-use HTTP::Request;
-use IO::Socket;
-use LWP::UserAgent;
-use URI;
+use HTTP::Daemon ();
+use HTTP::Request ();
+use LWP::UserAgent ();
+use URI ();
 use utf8;
 
 delete $ENV{PERL_LWP_ENV_PROXY};
@@ -64,7 +63,7 @@ sub _test {
     return plan skip_all => 'We could not talk to our daemon' unless $DAEMON;
     return plan skip_all => 'No base URI' unless $base;
 
-    plan tests => 130;
+    plan tests => 136;
 
     my $ua = LWP::UserAgent->new;
     $ua->agent("Mozilla/0.01 " . $ua->agent);
@@ -429,6 +428,48 @@ sub _test {
         # Must have only one cookie
         is( scalar( () = $res->decoded_content =~ /who\s*=\s*cookie_man/g ), 1, "request had only one cookie header" )
     }
+    {    # timeouts for cached connections
+        $ua->conn_cache({});
+        my $conn_cache = $ua->conn_cache;
+        isa_ok($conn_cache, 'LWP::ConnCache', 'connection cache was created');
+
+        my $timeout = $ua->timeout;
+        $ua->timeout(30);
+        $ua->get( url( "/echo", $base ) );
+
+        # one connection is now cached, the cached connection has a timeout of 30
+        is(
+            ( $conn_cache->get_connections )[0]->timeout, 30,
+            'first connection has the right timeout'
+        );
+
+        $ua->timeout(40);
+        is(
+            ( $conn_cache->get_connections )[0]->timeout, 40,
+            '... and its timeout gets updated'
+        );
+
+        # setting the connection cache to an existing cache object should
+        # update that cache's connections' timeouts
+        $ua->conn_cache(undef);
+        is($ua->conn_cache, undef, 'connection cache can be set back to default value of undef');
+
+        $ua->timeout(50);
+        is(
+            ( $conn_cache->get_connections )[0]->timeout, 40,
+            '... and changing the UA timeout does not affect the removed connection cache'
+        );
+
+        $ua->conn_cache($conn_cache);
+        is(
+            ( $conn_cache->get_connections )[0]->timeout, 50,
+            'assigning existing connection cache updates its timeout to our timeout'
+        );
+
+        # restore defaults
+        $ua->timeout($timeout);
+        $ua->conn_cache(undef);
+    }
     { # terminate server
         my $req = HTTP::Request->new(GET => url("/quit", $base));
         my $res = $ua->request($req);
@@ -677,7 +718,7 @@ sub daemonize {
         $c->print($req->as_string);
     };
 
-    # Note: tiemout of 0 is not infinite, so no point in special casing
+    # Note: timeout of 0 is not infinite, so no point in special casing
     # timeout logic.
     my $d = HTTP::Daemon->new(Timeout => $ENV{PERL_LWP_ENV_HTTP_TEST_SERVER_TIMEOUT} || 10, LocalAddr => '127.0.0.1') || die $!;
     print "Pleased to meet you at: <URL:", $d->url, ">\n";

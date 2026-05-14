@@ -7,11 +7,11 @@ Section: perl
 Testsuite: autopkgtest-pkg-perl
 Priority: optional
 Build-Depends: debhelper-compat (= 13)
-Build-Depends-Indep: libcpan-meta-requirements-perl <!nocheck>,
-                     libencode-locale-perl <!nocheck>,
+Build-Depends-Indep: libencode-locale-perl <!nocheck>,
                      libfile-listing-perl <!nocheck>,
                      libhtml-parser-perl <!nocheck>,
                      libhttp-cookies-perl <!nocheck>,
+                     libhttp-cookiejar-perl <!nocheck>,
                      libhttp-daemon-perl (>= 6.12) <!nocheck>,
                      libhttp-date-perl <!nocheck>,
                      libhttp-message-perl <!nocheck>,
@@ -27,7 +27,7 @@ Build-Depends-Indep: libcpan-meta-requirements-perl <!nocheck>,
                      libwww-robotrules-perl <!nocheck>,
                      netbase <!nocheck>,
                      perl
-Standards-Version: 4.6.0
+Standards-Version: 4.7.2
 Vcs-Browser: https://salsa.debian.org/perl-team/modules/packages/libwww-perl
 Vcs-Git: https://salsa.debian.org/perl-team/modules/packages/libwww-perl.git
 Homepage: https://metacpan.org/release/libwww-perl

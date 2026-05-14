@@ -1,10 +1,10 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::RequiresInternet ('jigsaw.w3.org' => 80);
+use Test::RequiresInternet ('jigsaw.w3.org' => 443);
 
-use HTTP::Request;
-use LWP::UserAgent;
+use HTTP::Request ();
+use LWP::UserAgent ();
 
 SKIP: {
     skip 'LIVE_JIGSAW_TESTS not enabled', 3 if $ENV{NO_JIGSAW};
@@ -18,7 +18,7 @@ SKIP: {
 
     for my $te (@te) {
         my $req
-            = HTTP::Request->new(GET => 'http://jigsaw.w3.org/HTTP/TE/foo.txt');
+            = HTTP::Request->new(GET => 'https://jigsaw.w3.org/HTTP/TE/foo.txt');
 
         if (defined $te) {
             $req->header(TE         => $te);

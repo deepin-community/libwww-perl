@@ -15,20 +15,24 @@ on 'runtime' => sub {
     requires 'Digest::MD5';
     requires 'Encode' => '2.12';
     requires 'Encode::Locale';
+    requires 'File::Copy';
     requires 'File::Listing' => '6';
+    requires 'File::Temp';
+    requires 'Getopt::Long';
     requires 'HTML::Entities';
-    requires 'HTML::HeadParser';
+    requires 'HTML::HeadParser' => '3.71';
     requires 'HTTP::Cookies' => '6';
     requires 'HTTP::Date' => '6';
     requires 'HTTP::Negotiate' => '6';
-    requires 'HTTP::Request' => '6';
-    requires 'HTTP::Request::Common' => '6';
-    requires 'HTTP::Response' => '6';
-    requires 'HTTP::Status' => '6.07';
+    requires 'HTTP::Request' => '6.18';
+    requires 'HTTP::Request::Common' => '6.18';
+    requires 'HTTP::Response' => '6.18';
+    requires 'HTTP::Status' => '6.18';
     requires 'IO::Select';
     requires 'IO::Socket';
     requires 'LWP::MediaTypes' => '6';
     requires 'MIME::Base64' => '2.1';
+    requires 'Module::Load';
     requires 'Net::FTP' => '2.58';
     requires 'Net::HTTP' => '6.18';
     requires 'Scalar::Util';
@@ -43,6 +47,7 @@ on 'runtime' => sub {
 };
 
 on 'test' => sub {
+    requires 'HTTP::CookieJar::LWP';
     requires 'HTTP::Daemon' => '6.12';
     requires 'Test::Fatal';
     requires 'Test::More', '0.96';
@@ -55,6 +60,7 @@ on 'test' => sub {
 on 'develop' => sub {
     requires 'Authen::NTLM' => '1.02';
     requires 'Pod::Coverage::TrustPod';
+    requires 'Pod::Spell' => '1.25';
     requires 'Test::EOL' => '2.00';
     requires 'Test::LeakTrace' => '0.16';
     requires 'Test::MinimumVersion';
