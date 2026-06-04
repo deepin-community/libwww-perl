@@ -1,3 +1,10 @@
+libwww-perl (6.58-1deepin1) unstable; urgency=medium
+
+  * Add fix for CVE-2026-8368 (credential leakage via cross-origin
+    redirects)
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 04 Jun 2026 09:54:32 +0800
+
 libwww-perl (6.58-1) unstable; urgency=medium
 
   * Import upstream version 6.58.
