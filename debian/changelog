@@ -1,3 +1,9 @@
+libwww-perl (6.78-1deepin1) unstable; urgency=medium
+
+  * fix(cve): CVE-2026-8368
+
+ -- deepin-ci-robot <packages@deepin.org>  Thu, 16 Jul 2026 21:16:49 +0800
+
 libwww-perl (6.78-1) unstable; urgency=medium
 
   * Import upstream version 6.78.
